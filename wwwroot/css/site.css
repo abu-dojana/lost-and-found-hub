@@ -1,0 +1,140 @@
+/* wwwroot/css/site.css */
+
+/* Full-page background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+    color: #ffffff; /* Text color for contrast */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* If you want to use an image background instead */
+/*
+body {
+    background-image: url('/images/background.jpg'); /* Path to your image */
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+}
+*/
+
+/* Navbar styling */
+.navbar {
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent navbar */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    color: blue;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+    color: white !important;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00 !important; /* Highlight on hover */
+    }
+
+/* Card styling */
+.card {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent cards */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+.card-img-top {
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #2575fc;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #6a11cb;
+    }
+
+/* Footer */
+.footer {
+    background-color: #1c1c1c; /* Dark background */
+    color: white; /* White text */
+    padding: 1rem 0; /* Reduced padding for spacing */
+    margin-top: auto; /* Push footer to the bottom */
+}
+
+    .footer h5 {
+        font-weight: bold;
+        margin-bottom: 0.5rem; /* Reduced margin below headings */
+    }
+
+    .footer ul {
+        padding-left: 0; /* Remove default list padding */
+    }
+
+        .footer ul li {
+            margin-bottom: 0.3rem; /* Reduced spacing between list items */
+        }
+
+    .footer a {
+        color: #ffffff; /* White links */
+        text-decoration: none; /* Remove underline */
+    }
+
+        .footer a:hover {
+            color: #ffcc00; /* Highlight on hover */
+        }
+.animate__animated {
+    --animate-duration: 1s; /* Default is 1s */
+    --animate-delay: 0.5s; /* Delay before animation starts */
+}
+.btn {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+.card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Move card slightly upward */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+.loader {
+    border: 5px solid #f3f3f3; /* Light gray */
+    border-top: 5px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

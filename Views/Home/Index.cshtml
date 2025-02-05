@@ -1,0 +1,78 @@
+﻿<!-- Views/Home/Index.cshtml -->
+@model LAF.Models.ViewModels.HomeVM
+
+@{
+    ViewData["Title"] = "Lost and Found - Home";
+}
+
+<div class="container">
+    <h1>Welcome to Lost and Found</h1>
+
+    <!-- Counters -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Lost Items</h5>
+                    <p class="card-text">@Model.TotalLostItems</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Found Items (Last 24 Hours)</h5>
+                    <p class="card-text">@Model.RecentRecoveries</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Registered Users</h5>
+                    <p class="card-text">@Model.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" name="searchString" class="form-control" placeholder="Search items..." />
+            </div>
+            <div class="col-md-4">
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var cat in Enum.GetValues(typeof(Category)))
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Item Cards -->
+    <div class="row">
+        @if (Model.Items.Any())
+        {
+            foreach (var item in Model.Items)
+            {
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1000">
+                    <partial name="_ItemCard" model="item" />
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center animate__animated animate__fadeIn">
+                <p>No items found.</p>
+            </div>
+        }
+    </div>
+</div>
