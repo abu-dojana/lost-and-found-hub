@@ -1,6 +1,6 @@
 # Lost and Found Hub
 
-## Overview
+## Project Overview
 Lost and Found Hub is a web-based platform built using **ASP.NET Core MVC** and **SQL Server** that simplifies the process of reporting and recovering lost items. The system provides a centralized and user-friendly environment where:
 
 - Users can **report lost items** with detailed descriptions.
