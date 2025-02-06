@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-namespace LAF.Models
+
+public class ApplicationUser : IdentityUser
 {
-    public class ApplicationUser : IdentityUser
-    {
-        public required string FullName { get; set; }
-        public required string Location { get; set; }
-        public string? PhotoPath { get; set; } 
-    }
+    public string FullName { get; set; }
+    public string Location { get; set; }
+    public string PhotoPath { get; set; }
 }

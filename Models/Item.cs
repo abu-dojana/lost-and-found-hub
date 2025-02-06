@@ -1,20 +1,40 @@
-namespace LAF.Models
+namespace LAF.Models;
+
+using System.ComponentModel.DataAnnotations;
+// Models/Item.cs
+
+using Microsoft.AspNetCore.Identity;
+
+public class Item
 {
-    public class Item
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        // Required fields
-        public required string Name { get; set; } // Use 'required' if using C# 11+
-        public required string Description { get; set; }
-        public required bool IsLost { get; set; } // True=Lost, False=Found
-        public required DateTime Date { get; set; }
-        public required string Location { get; set; }
-        public Category Category { get; set; } // Enum, no need for 'required'
+    [Required(ErrorMessage = "Item name is required.")]
+    public string Name { get; set; }
 
-        // Nullable fields
-        public string? ImagePath { get; set; } // Optional image path
-        public required string UserId { get; set; } // Foreign key to ApplicationUser
-        public ApplicationUser? User { get; set; } // Navigation property
-    }
+    public string Description { get; set; }
+
+    public bool IsLost { get; set; } // True = Lost, False = Found
+
+    [Required(ErrorMessage = "Date is required.")]
+    public DateTime Date { get; set; }
+
+    [Required(ErrorMessage = "Location is required.")]
+    public string Location { get; set; }
+
+    public string ImagePath { get; set; } // Path to the uploaded image
+
+    public Category Category { get; set; }
+
+    public string UserId { get; set; }
+    public ApplicationUser User { get; set; }
+}
+
+
+// Extend IdentityUser in Models/ApplicationUser.cs
+public class ApplicationUser : IdentityUser
+{
+    public string FullName { get; set; }
+    public string Location { get; set; }
+    public string PhotoPath { get; set; }
 }
