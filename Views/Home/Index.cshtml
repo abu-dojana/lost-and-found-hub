@@ -63,14 +63,14 @@
         {
             foreach (var item in Model.Items)
             {
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1000">
+                <div class="col-md-4 mb-4">
                     <partial name="_ItemCard" model="item" />
                 </div>
             }
         }
         else
         {
-            <div class="col-12 text-center animate__animated animate__fadeIn">
+            <div class="col-12 text-center">
                 <p>No items found.</p>
             </div>
         }
