@@ -1,0 +1,205 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<style>
+    /* Basic Styling for Body */
+    body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        background-image: url('@Url.Content("~/images/lf.jpg")');
+        background-size: cover;
+        -webkit-backdrop-filter: invert(15%);
+        backdrop-filter: invert(15%);
+        background-attachment: fixed;
+    }
+
+    /* Container for the Form */
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Section Header */
+    .form-section h2 {
+        font-size: 2rem;
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    /* Form Group Styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        /* Labels */
+        .form-group label {
+            font-size: 1.1rem;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    /* Input and Select Styling */
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fafafa;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+    }
+
+        /* Focus Effect on Inputs */
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+    /* Textarea */
+    textarea {
+        resize: vertical;
+        height: 150px;
+    }
+
+    /* Button Styling */
+    button {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Button Hover Effect */
+        button:hover {
+            background-color: #2980b9;
+        }
+
+    /* Hover Effect for File Input */
+    input[type="file"]:hover {
+        background-color: #ececec;
+    }
+
+    /* Responsive Design */
+
+</style>
+
+
+    <!-- Post a Lost Item Form -->
+    <div class="container">
+        <section class="form-section">
+            <h2>Post a Lost Item</h2>
+            <form id="lostItemForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="lostItemName">Item Name:</label>
+                    <input type="text" id="lostItemName" placeholder="Enter lost item name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lostItemCategory">Item Category:</label>
+                    <select id="lostItemCategory" required>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="documents">Documents</option>
+                        <option value="jewelry">Jewelry</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="lostItemDescription">Description:</label>
+                    <textarea id="lostItemDescription" placeholder="Enter detailed description of the lost item" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="lostItemLocation">Location:</label>
+                    <input type="text" id="lostItemLocation" placeholder="Where was it lost?" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lostItemImage">Upload Image:</label>
+                    <input type="file" id="lostItemImage" accept="image/*" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lostItemContact">Contact Details:</label>
+                    <input type="text" id="lostItemContact" placeholder="How can people reach you?" required>
+                </div>
+
+                <button type="submit">Post Lost Item</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Lost & Found, All Rights Reserved.</p>
+    </footer>
+
+    <!-- Internal JavaScript -->
+<!-- Internal JavaScript -->
+<script>
+    // Initialize lostItems from localStorage or an empty array if none exists
+    let lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+    const lostItemForm = document.getElementById('lostItemForm');
+
+    // Handle form submission
+    lostItemForm.addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Collect form data
+        const name = document.getElementById('lostItemName').value;
+        const category = document.getElementById('lostItemCategory').value;
+        const description = document.getElementById('lostItemDescription').value;
+        const location = document.getElementById('lostItemLocation').value;
+        const contact = document.getElementById('lostItemContact').value;
+        const imageFile = document.getElementById('lostItemImage').files[0];
+
+        // Check if image is uploaded
+        if (!imageFile) {
+            alert('Please upload an image.');
+            return;
+        }
+
+        // Read the image file as base64
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            // Create lostItem object with form data and image as base64
+            const lostItem = {
+                name: name,
+                category: category,
+                description: description,
+                location: location,
+                contact: contact,
+                image: reader.result // Store the base64 encoded image
+            };
+
+            // Add the new item to the lostItems array and save to localStorage
+            lostItems.push(lostItem);
+            localStorage.setItem('lostItems', JSON.stringify(lostItems));
+
+            // Reset the form and redirect to the lost items listing page
+            lostItemForm.reset();
+            window.location.href = '@Url.Action("SeeLostListings", "Item")';  // Redirect to listings
+        };
+
+        reader.readAsDataURL(imageFile); // Read the image as base64
+    });
+</script>
+

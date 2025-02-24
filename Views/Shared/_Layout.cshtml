@@ -1,121 +1,47 @@
-﻿<!-- Views/Shared/_Layout.cshtml -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Lost and Found</title>
+    <title>@ViewData["Title"] - LostandFound</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LAF.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/LostandFound.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LAF</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
-        </div>
-    </nav>
+<body style="background-image: url('@Url.Content("~/images/lf.jpg")');">
 
-    <!-- Main Content -->
-    <div class="container my-4">
-        @RenderBody()
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img style="width:250px;" src="~/images/lfl.png" alt="Lost & Found Marketplace Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a style="color:snow" href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li><a style="color:snow" href="@Url.Action("PostLostItem", "Item")">Post a Lost Item</a></li>
+                    <li><a style="color:snow" href="@Url.Action("PostFoundItem", "Item")">Post a Found Item</a></li>
+                    <li><a style="color:snow" href="@Url.Action("SeeLostListings", "Item")">See Lost Items</a></li>
+                    <li><a style="color:snow" href="@Url.Action("SeeFoundListings", "Item")">See Found Items</a></li>
+                    <li><a style="color:snow" href="@Url.Action("Register", "Account")">Register</a></li>
+                    <li><a style="color:snow" href="@Url.Action("Login", "Account")">Log in</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+
+        </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer mt-auto py-2 bg-dark text-white">
-        <div class="container">
-            <div class="row g-3">
-                <!-- About Section -->
-                <div class="col-md-4">
-                    <h6>About Us</h6>
-                    <p class="small">
-                        Lost and Found (LAF) is a platform designed to help people recover their lost items and return found items to their rightful owners.
-                    </p>
-                </div>
 
-                <!-- Contact Information -->
-                <div class="col-md-4">
-                    <h6>Contact Us</h6>
-                    <ul class="list-unstyled small">
-                        <li><i class="bi bi-envelope"></i> Email: support@laf.com</li>
-                        <li><i class="bi bi-telephone"></i> Phone: +123 456 7890</li>
-                        <li><i class="bi bi-geo-alt"></i> Address: 123 Main Street, City, Country</li>
-                    </ul>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="col-md-4">
-                    <h6>Quick Links</h6>
-                    <ul class="list-unstyled small">
-                        <li><a href="/About" class="text-white">About Lost and Found</a></li>
-                        <li><a href="/Privacy" class="text-white">Privacy Policy</a></li>
-                        <li><a href="/Terms" class="text-white">Terms of Service</a></li>
-                        <li><a href="/Contact" class="text-white">Contact Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="row mt-2">
-                <div class="col text-center small">
-                    <p>&copy; 2025 Lost and Found. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
-    <div id="loader" class="loader" style="display: none;"></div>
-
-    <script>
-        window.addEventListener('load', () => {
-            document.getElementById('loader').style.display = 'none';
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const elements = document.querySelectorAll('.fade-in');
-            elements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('visible');
-                }, index * 300); // Staggered animation
-            });
-        });
-    </script>
-
-    <style>
-        .fade-in {
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-            .fade-in.visible {
-                opacity: 1;
-            }
-    </style>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
