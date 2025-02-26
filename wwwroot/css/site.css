@@ -1,140 +1,201 @@
-/* wwwroot/css/site.css */
-
-/* Full-page background */
-body {
+/* Reset some basic styles */
+* {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
-    color: #ffffff; /* Text color for contrast */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    box-sizing: border-box;
 }
 
-/* If you want to use an image background instead */
-/*
+/* Basic Body Styles */
 body {
-    background-image: url('/images/background.jpg'); /* Path to your image */
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-}
-*/
+    font-family: "Poppins", sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
 
-/* Navbar styling */
-.navbar {
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent navbar */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
-    color: blue;
+    background-size: cover;
+    -webkit-backdrop-filter: invert(15%);
+    backdrop-filter: invert(15%);
+    background-attachment: fixed;
 }
 
-.navbar-brand,
-.navbar-nav .nav-link {
-    color: white !important;
+/* Header Styles */
+header {
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
 }
 
-    .navbar-nav .nav-link:hover {
-        color: #ffcc00 !important; /* Highlight on hover */
+    header .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.692);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        margin-bottom: 5rem;
     }
 
-/* Card styling */
-.card {
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent cards */
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out;
-}
-
-    .card:hover {
-        transform: scale(1.05);
-    }
-
-.card-img-top {
-    height: 150px;
-    object-fit: cover;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Button styling */
-.btn-primary {
-    background-color: #2575fc;
-    border: none;
-}
-
-    .btn-primary:hover {
-        background-color: #6a11cb;
-    }
-
-/* Footer */
-.footer {
-    background-color: #1c1c1c; /* Dark background */
-    color: white; /* White text */
-    padding: 1rem 0; /* Reduced padding for spacing */
-    margin-top: auto; /* Push footer to the bottom */
-}
-
-    .footer h5 {
+    header .logo h1 {
+        font-size: 2.5rem;
         font-weight: bold;
-        margin-bottom: 0.5rem; /* Reduced margin below headings */
+        text-transform: uppercase;
     }
 
-    .footer ul {
-        padding-left: 0; /* Remove default list padding */
+    header nav ul {
+        display: flex;
+        list-style: none;
     }
 
-        .footer ul li {
-            margin-bottom: 0.3rem; /* Reduced spacing between list items */
+        header nav ul li {
+            margin: 0 15px;
         }
 
-    .footer a {
-        color: #ffffff; /* White links */
-        text-decoration: none; /* Remove underline */
+            header nav ul li a {
+                text-decoration: none;
+                color: white;
+                font-size: 1.1rem;
+                font-weight: 600;
+                transition: color 0.3s ease;
+            }
+
+                header nav ul li a:hover {
+                    color: #ffcc00;
+                }
+
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.cta-btn {
+    background-color: #ffcc00;
+    padding: 15px 25px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 25px;
+    margin: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+    .cta-btn:hover {
+        background-color: #ff9900;
     }
 
-        .footer a:hover {
-            color: #ffcc00; /* Highlight on hover */
+/* Items Listing Section */
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.items-list {
+    margin-bottom: 40px;
+}
+
+    .items-list h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.item-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .item-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .item-card h3 {
+        font-size: 1.3rem;
+        color: #333;
+        margin: 15px 0;
+    }
+
+    .item-card p {
+        font-size: 1rem;
+        color: #555;
+    }
+
+.view-more-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 15px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+    .view-more-btn:hover {
+        background-color: #00bfae;
+    }
+
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+    footer .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    footer .social-icons {
+        margin-top: 15px;
+    }
+
+        footer .social-icons a {
+            margin: 0 10px;
+            display: inline-block;
         }
-.animate__animated {
-    --animate-duration: 1s; /* Default is 1s */
-    --animate-delay: 0.5s; /* Delay before animation starts */
-}
-.btn {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
 
-.btn:hover {
-    transform: scale(1.05); /* Slightly enlarge the button */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow */
-}
+        footer .social-icons img {
+            width: 30px;
+            height: 30px;
+        }
 
-.card {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-10px); /* Move card slightly upward */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow */
-}
-
-.loader {
-    border: 5px solid #f3f3f3; /* Light gray */
-    border-top: 5px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: auto;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
+/* Responsive Design */
+@media (max-width: 768px) {
+    header .navbar {
+        flex-direction: column;
     }
 
-    100% {
-        transform: rotate(360deg);
+    header nav ul {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .cta-btn {
+        margin-bottom: 10px;
     }
 }
-
