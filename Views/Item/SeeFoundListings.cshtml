@@ -1,186 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<LostandFound.Models.FoundItem>
+
 @{
+    ViewData["Title"] = "Found Items";
 }
 
-
-<style>
-    /* Basic Styling for Body */
-    body {
-        font-family: "Poppins", sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        background-image: url('@Url.Content("~/images/lf.jpg")');
-        background-size: cover;
-        -webkit-backdrop-filter: invert(15%);
-        backdrop-filter: invert(15%);
-        background-attachment: fixed;
-    }
-
-    /* Navbar */
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 15px;
-    }
-
-    .logo img {
-        width: 250px;
-        background-color: rgba(9, 1, 20, 0.021);
-    }
-
-    nav ul {
-        display: flex;
-        list-style: none;
-    }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-            nav ul li a {
-                text-decoration: none;
-                color: white;
-                font-size: 1rem;
-                font-weight: 600;
-                transition: color 0.3s ease;
-            }
-
-                nav ul li a:hover {
-                    color: #ffcc00;
+<div class="container">
+    <section class="items-list">
+        <h2>Found Items</h2>
+        <div class="items-grid">
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <div class="item-card">
+                        <img src="@item.ImageUrl" alt="@item.ItemName" style="width: 100%; height: 200px; object-fit: cover;" />
+                        <h3>@item.ItemName</h3>
+                        <p><strong>Category:</strong> @item.Category</p>
+                        <p><strong>Description:</strong> @item.Description</p>
+                        <p><strong>Location:</strong> @item.Location</p>
+                        <p><strong>Contact:</strong> @item.ContactDetails</p>
+                    </div>
                 }
-
-    /* Listings Section */
-    .container {
-        max-width: 1200px;
-        margin: 30px auto;
-        padding: 20px;
-    }
-
-    .items-list h2 {
-        font-size: 2rem;
-        color: #333;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .items-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-
-    .item-card {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .item-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .item-card h3 {
-            font-size: 1.3rem;
-            color: #333;
-            margin: 15px 0;
-        }
-
-        .item-card p {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .item-card:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transform: translateY(-10px);
-        }
-
-    /* Footer Section */
-    footer {
-        background-color: #333;
-        color: white;
-        padding: 30px 20px;
-        text-align: center;
-    }
-
-
-</style>
-
-
-
-    <!-- Listings of Found Items -->
-    <div class="container">
-        <section class="items-list">
-            <h2>Found Items</h2>
-            <div class="items-grid" id="foundItemsList">
-                <!-- Dynamic Found Items will be loaded here -->
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>&copy; 2025 Lost & Found, All Rights Reserved.</p>
-    </footer>
-
-    <!-- Internal JavaScript to Display Found Items -->
-    <script>
-        // Retrieve found items from localStorage
-        let foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
-
-        // Function to create and display item cards dynamically
-        function createItemCard(item, type) {
-            const card = document.createElement('div');
-            card.classList.add('item-card');
-
-            // Add different class depending on item type (found/lost)
-            if (type === 'found') {
-                card.classList.add('found-items');
             }
-
-            card.innerHTML = `
-                <img src="${item.image}" alt="${item.name}">
-                <h3>${item.name}</h3>
-                <p><strong>Location:</strong> ${item.location}</p>
-                <p><strong>Category:</strong> ${item.category}</p>
-                <p><strong>Description:</strong> ${item.description}</p>
-                <p><strong>Contact:</strong> ${item.contact}</p>
-            `;
-
-            return card;
-        }
-
-        // Function to display Found Items on the page
-        function displayFoundItems() {
-            const foundItemsList = document.getElementById('foundItemsList');
-            foundItemsList.innerHTML = ''; // Clear the list before appending new items
-
-            if (foundItems.length === 0) {
-                foundItemsList.innerHTML = '<p>No found items available.</p>';
-                return;
+            else
+            {
+                <p>No found items found.</p>
             }
-
-            // Loop through and create item cards for Found Items
-            foundItems.forEach(item => {
-                const card = createItemCard(item, 'found');
-                foundItemsList.appendChild(card);
-            });
-        }
-
-        // Call the function to display the found items on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            displayFoundItems();
-        });
-    </script>
-
+        </div>
+    </section>
+</div>
