@@ -1,7 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model LostandFound.Models.LostItem
+
 @{
+    ViewData["Title"] = "Post a Lost Item";
 }
 
 <style>
@@ -105,45 +105,44 @@
     <div class="container">
         <section class="form-section">
             <h2>Post a Lost Item</h2>
-            <form id="lostItemForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="lostItemName">Item Name:</label>
-                    <input type="text" id="lostItemName" placeholder="Enter lost item name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lostItemCategory">Item Category:</label>
-                    <select id="lostItemCategory" required>
-                        <option value="electronics">Electronics</option>
-                        <option value="clothing">Clothing</option>
-                        <option value="documents">Documents</option>
-                        <option value="jewelry">Jewelry</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="lostItemDescription">Description:</label>
-                    <textarea id="lostItemDescription" placeholder="Enter detailed description of the lost item" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="lostItemLocation">Location:</label>
-                    <input type="text" id="lostItemLocation" placeholder="Where was it lost?" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lostItemImage">Upload Image:</label>
-                    <input type="file" id="lostItemImage" accept="image/*" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lostItemContact">Contact Details:</label>
-                    <input type="text" id="lostItemContact" placeholder="How can people reach you?" required>
-                </div>
-
-                <button type="submit">Post Lost Item</button>
-            </form>
+        <form asp-action="PostLostItem" method="post">
+            <div>
+                <label asp-for="ItemName"></label>
+                <input asp-for="ItemName" />
+                <span asp-validation-for="ItemName"></span>
+            </div>
+            <div>
+                <label asp-for="Category"></label>
+                <select asp-for="Category">
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="Category"></span>
+            </div>
+            <div>
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div>
+                <label asp-for="Location"></label>
+                <input asp-for="Location" />
+                <span asp-validation-for="Location"></span>
+            </div>
+            <div class="form-group">
+                <label for="lostItemImage">Upload Image:</label>
+                <input type="file" id="lostItemImage" accept="images/*" required>
+            </div>
+            <div>
+                <label asp-for="ContactDetails"></label>
+                <input asp-for="ContactDetails" />
+                <span asp-validation-for="ContactDetails"></span>
+            </div>
+            <button type="submit">Post Lost Item</button>
+        </form>
         </section>
     </div>
 
@@ -151,55 +150,3 @@
     <footer>
         <p>&copy; 2025 Lost & Found, All Rights Reserved.</p>
     </footer>
-
-    <!-- Internal JavaScript -->
-<!-- Internal JavaScript -->
-<script>
-    // Initialize lostItems from localStorage or an empty array if none exists
-    let lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
-    const lostItemForm = document.getElementById('lostItemForm');
-
-    // Handle form submission
-    lostItemForm.addEventListener('submit', function (e) {
-        e.preventDefault();  // Prevent the default form submission
-
-        // Collect form data
-        const name = document.getElementById('lostItemName').value;
-        const category = document.getElementById('lostItemCategory').value;
-        const description = document.getElementById('lostItemDescription').value;
-        const location = document.getElementById('lostItemLocation').value;
-        const contact = document.getElementById('lostItemContact').value;
-        const imageFile = document.getElementById('lostItemImage').files[0];
-
-        // Check if image is uploaded
-        if (!imageFile) {
-            alert('Please upload an image.');
-            return;
-        }
-
-        // Read the image file as base64
-        const reader = new FileReader();
-        reader.onloadend = function () {
-            // Create lostItem object with form data and image as base64
-            const lostItem = {
-                name: name,
-                category: category,
-                description: description,
-                location: location,
-                contact: contact,
-                image: reader.result // Store the base64 encoded image
-            };
-
-            // Add the new item to the lostItems array and save to localStorage
-            lostItems.push(lostItem);
-            localStorage.setItem('lostItems', JSON.stringify(lostItems));
-
-            // Reset the form and redirect to the lost items listing page
-            lostItemForm.reset();
-            window.location.href = '@Url.Action("SeeLostListings", "Item")';  // Redirect to listings
-        };
-
-        reader.readAsDataURL(imageFile); // Read the image as base64
-    });
-</script>
-
