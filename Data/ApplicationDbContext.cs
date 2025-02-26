@@ -1,12 +1,19 @@
 ﻿// Data/ApplicationDbContext.cs
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LAF.Models;
+using LostandFound.Models;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+namespace LostandFound.Data
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options) { }
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
-    public DbSet<Item> Items { get; set; }
+        // Define DbSets for your models
+        public DbSet<User> Users { get; set; }
+        public DbSet<LostItem> LostItems { get; set; }
+        public DbSet<FoundItem> FoundItems { get; set; }
+    }
 }
