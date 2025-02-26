@@ -1,4 +1,4 @@
-namespace LAF.Models;
+namespace LostandFound.Models;
 
 public class ErrorViewModel
 {
