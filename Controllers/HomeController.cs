@@ -1,47 +1,43 @@
-// Controllers/HomeController.cs
+using LostandFound.Data;
+using LostandFound.Models;
+using LostandFound.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using LAF.Data;
-using LAF.Models;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Linq;
-using LAF.Models.ViewModels;
 
-namespace LAF.Controllers
+namespace LostandFound.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context; // Add DbContext
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
-            _context = context;
+            _logger = logger;
+            _context = context; // Inject DbContext
         }
 
-        public IActionResult Index(string searchString, Category? category)
+        public IActionResult Index()
         {
-            // Fetch stats for counters
-            var stats = new HomeVM
+            var viewModel = new HomeViewModel
             {
-                TotalLostItems = _context.Items.Count(i => i.IsLost),
-                RecentRecoveries = _context.Items.Count(i => !i.IsLost && i.Date >= DateTime.Now.AddDays(-1)),
-                TotalUsers = _context.Users.Count(),
-                Items = _context.Items.ToList() // Default list of items
+                LostItems = _context.LostItems.Take(4).ToList(),
+                FoundItems = _context.FoundItems.Take(4).ToList()
             };
+            return View(viewModel);
+        }
 
-            // Apply search filter
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                stats.Items = stats.Items.Where(i =>
-                    i.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    i.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
-            // Apply category filter
-            if (category.HasValue)
-            {
-                stats.Items = stats.Items.Where(i => i.Category == category).ToList();
-            }
-
-            return View(stats);
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
