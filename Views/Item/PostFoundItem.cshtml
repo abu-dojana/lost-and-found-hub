@@ -1,9 +1,8 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model LostandFound.Models.FoundItem
 
+@{
+    ViewData["Title"] = "Post a Found Item";
+}
 
 <style>
  
@@ -94,45 +93,44 @@
     <div class="container">
         <section class="form-section">
             <h2>Post a Found Item</h2>
-            <form id="foundItemForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="foundItemName">Item Name:</label>
-                    <input type="text" id="foundItemName" placeholder="Enter found item name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="foundItemCategory">Item Category:</label>
-                    <select id="foundItemCategory" required>
-                        <option value="electronics">Electronics</option>
-                        <option value="clothing">Clothing</option>
-                        <option value="documents">Documents</option>
-                        <option value="jewelry">Jewelry</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="foundItemDescription">Description:</label>
-                    <textarea id="foundItemDescription" placeholder="Enter detailed description of the found item" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="foundItemLocation">Location:</label>
-                    <input type="text" id="foundItemLocation" placeholder="Where was it found?" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="foundItemImage">Upload Image:</label>
-                    <input type="file" id="foundItemImage" accept="image/*" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="foundItemContact">Contact Details:</label>
-                    <input type="text" id="foundItemContact" placeholder="How can people reach you?" required>
-                </div>
-
-                <button type="submit">Post Found Item</button>
-            </form>
+        <form asp-action="PostFoundItem" method="post">
+            <div>
+                <label asp-for="ItemName"></label>
+                <input asp-for="ItemName" />
+                <span asp-validation-for="ItemName"></span>
+            </div>
+            <div>
+                <label asp-for="Category"></label>
+                <select asp-for="Category">
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="Category"></span>
+            </div>
+            <div>
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div>
+                <label asp-for="Location"></label>
+                <input asp-for="Location" />
+                <span asp-validation-for="Location"></span>
+            </div>
+            <div class="form-group">
+                <label for="foundItemImage">Upload Image:</label>
+                <input type="file" id="foundItemImage" accept="images/*" required>
+            </div>
+            <div>
+                <label asp-for="ContactDetails"></label>
+                <input asp-for="ContactDetails" />
+                <span asp-validation-for="ContactDetails"></span>
+            </div>
+            <button type="submit">Post Found Item</button>
+        </form>
         </section>
     </div>
 
@@ -140,62 +138,3 @@
     <footer>
         <p>&copy; 2025 Lost & Found, All Rights Reserved.</p>
     </footer>
-
-    <!-- Internal JavaScript -->
-    <script>
-        // Initialize the Found Items array in localStorage (or empty if not available)
-        let foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
-
-        // Get the form element
-        const foundItemForm = document.getElementById('foundItemForm');
-
-        // Handle form submission
-        foundItemForm.addEventListener('submit', function (e) {
-            e.preventDefault();  // Prevent the default form submission
-
-            // Collect form data for the found item
-            const name = document.getElementById('foundItemName').value;
-            const category = document.getElementById('foundItemCategory').value;
-            const description = document.getElementById('foundItemDescription').value;
-            const location = document.getElementById('foundItemLocation').value;
-            const contact = document.getElementById('foundItemContact').value;
-            const imageFile = document.getElementById('foundItemImage').files[0];
-
-            // Validate image file
-            if (!imageFile) {
-                alert('Please upload an image.');
-                return;
-            }
-
-            // Convert the image file to a data URL (base64 encoded)
-            const reader = new FileReader();
-            reader.onloadend = function () {
-                // Create an object for the found item
-                const foundItem = {
-                    name: name,
-                    category: category,
-                    description: description,
-                    location: location,
-                    contact: contact,
-                    image: reader.result // Use the base64 encoded image
-                };
-
-                // Save the new found item to the foundItems array
-                foundItems.push(foundItem);
-
-                // Store the updated array in localStorage
-                localStorage.setItem('foundItems', JSON.stringify(foundItems));
-
-                // Reset the form
-                foundItemForm.reset();
-
-                // Redirect to the Found Items Listings page
-                window.location.href = '@Url.Action("SeeFoundListings", "Item")';
-            };
-
-            // Read the image file as a data URL
-            reader.readAsDataURL(imageFile);
-        });
-</script>
-
-
