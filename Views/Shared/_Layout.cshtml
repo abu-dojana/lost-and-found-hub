@@ -1,46 +1,44 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LostandFound</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LostandFound.styles.css" asp-append-version="true" />
 </head>
-<body style="background-image: url('@Url.Content("~/images/lf.jpg")');">
-
+<body style="background-image: url('@Url.Content("~/images/lf.jpg")'); background-size: cover;">
     <!-- Navbar -->
     <header>
-        <div class="navbar">
+        <nav class="navbar">
             <div class="logo">
-                <img style="width:250px;" src="~/images/lfl.png" alt="Lost & Found Marketplace Logo">
+                <img style="width:250px;" src="@Url.Content("~/images/lfl.png")" alt="Lost & Found Marketplace Logo">
             </div>
-            <nav>
-                <ul>
-                    <li><a style="color:snow" href="@Url.Action("Index", "Home")">Home</a></li>
-                    <li><a style="color:snow" href="@Url.Action("PostLostItem", "Item")">Post a Lost Item</a></li>
-                    <li><a style="color:snow" href="@Url.Action("PostFoundItem", "Item")">Post a Found Item</a></li>
-                    <li><a style="color:snow" href="@Url.Action("SeeLostListings", "Item")">See Lost Items</a></li>
-                    <li><a style="color:snow" href="@Url.Action("SeeFoundListings", "Item")">See Found Items</a></li>
-                    <li><a style="color:snow" href="@Url.Action("Register", "Account")">Register</a></li>
-                    <li><a style="color:snow" href="@Url.Action("Login", "Account")">Log in</a></li>
-                </ul>
-            </nav>
-        </div>
+            <ul>
+                <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("Index", "Home")">Home</a></li>
+                <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("PostLostItem", "Item")">Post a Lost Item</a></li>
+                <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("PostFoundItem", "Item")">Post a Found Item</a></li>
+                <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeLostListings", "Item")">See Lost Items</a></li>
+                <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeFoundListings", "Item")">See Found Items</a></li>
+                @if (Context.Session.GetInt32("UserId") != null)
+                {
+                    <li><a href="@Url.Action("Logout", "Account")" class="login">LOG OUT</a></li>
+                }
+                else
+                {
+                    <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Register">Register</a></li>
+                    <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Login">Login</a></li>
+                }
+            </ul>
+        </nav>
     </header>
-
-
-
 
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-
         </main>
     </div>
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
