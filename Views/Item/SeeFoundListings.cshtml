@@ -1,31 +1,137 @@
-@model IEnumerable<LostandFound.Models.FoundItem>
+﻿@model IEnumerable<LostandFound.Models.FoundItem>
 
 @{
-    ViewData["Title"] = "Found Items";
+    ViewData["Title"] = "Found Items Listings";
 }
 
+<style>
+    .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .item-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s;
+    }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .item-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-content {
+        padding: 1rem;
+    }
+
+    .item-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+    }
+
+    .item-category {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #e1f5fe;
+        color: #0288d1;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-description {
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-location {
+        color: #666;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .item-contact {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .no-items {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+    }
+
+    .error-message {
+        background-color: #fee;
+        color: #c00;
+        padding: 1rem;
+        margin: 1rem;
+        border-radius: 4px;
+    }
+</style>
+
 <div class="container">
-    <section class="items-list">
-        <h2>Found Items</h2>
+    <h1 class="text-center my-4">Found Items</h1>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="no-items">
+            <h3>No found items have been posted yet.</h3>
+            <p>Be the first to post a found item!</p>
+        </div>
+    }
+    else
+    {
         <div class="items-grid">
-            @if (Model.Any())
+            @foreach (var item in Model)
             {
-                foreach (var item in Model)
-                {
-                    <div class="item-card">
-                        <img src="@item.ImageUrl" alt="@item.ItemName" style="width: 100%; height: 200px; object-fit: cover;" />
-                        <h3>@item.ItemName</h3>
-                        <p><strong>Category:</strong> @item.Category</p>
-                        <p><strong>Description:</strong> @item.Description</p>
-                        <p><strong>Location:</strong> @item.Location</p>
-                        <p><strong>Contact:</strong> @item.ContactDetails</p>
+                <div class="item-card">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.ItemName" class="item-image" />
+                    }
+                    else
+                    {
+                        <img src="/images/no-image.png" alt="No image available" class="item-image" />
+                    }
+                    <div class="item-content">
+                        <h3 class="item-title">@item.ItemName</h3>
+                        <span class="item-category">@item.Category</span>
+                        <p class="item-description">@item.Description</p>
+                        <div class="item-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>@item.Location</span>
+                        </div>
+                        <div class="item-contact">
+                            <strong>Contact:</strong>
+                            <p>@item.ContactDetails</p>
+                        </div>
                     </div>
-                }
-            }
-            else
-            {
-                <p>No found items found.</p>
+                </div>
             }
         </div>
-    </section>
+    }
 </div>

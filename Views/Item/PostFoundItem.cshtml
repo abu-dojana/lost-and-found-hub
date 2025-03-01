@@ -1,4 +1,4 @@
-@model LostandFound.Models.FoundItem
+﻿@model LostandFound.Models.FoundItem
 
 @{
     ViewData["Title"] = "Post a Found Item";
@@ -93,7 +93,7 @@
     <div class="container">
         <section class="form-section">
             <h2>Post a Found Item</h2>
-        <form asp-action="PostFoundItem" method="post">
+        <form asp-action="PostFoundItem" method="post" enctype="multipart/form-data">
             <div>
                 <label asp-for="ItemName"></label>
                 <input asp-for="ItemName" />
@@ -121,8 +121,9 @@
                 <span asp-validation-for="Location"></span>
             </div>
             <div class="form-group">
-                <label for="foundItemImage">Upload Image:</label>
-                <input type="file" id="foundItemImage" accept="images/*" required>
+                <label asp-for="ImageUrl">Upload Image:</label>
+                <input type="file" name="ImageFile" accept="image/*" class="form-control">
+                <span asp-validation-for="ImageUrl"></span>
             </div>
             <div>
                 <label asp-for="ContactDetails"></label>

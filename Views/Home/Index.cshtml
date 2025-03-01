@@ -1,7 +1,63 @@
-@model LostandFound.ViewModels.HomeViewModel
+﻿@model LostandFound.ViewModels.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<style>
+.search-container {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-container form {
+    display: flex;
+    gap: 10px;
+}
+
+.search-container input,
+.search-container select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.search-container button {
+    white-space: nowrap;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+</style>
+<!-- Add this right after the header/navbar section in Index.cshtml -->
+<div class="search-container" style="padding: 20px; background-color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form id="searchForm" class="d-flex gap-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search items...">
+                <select id="categoryFilter" class="form-select" style="max-width: 150px;">
+                    <option value="">All Categories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="typeFilter" class="form-select" style="max-width: 150px;">
+                    <option value="">All Types</option>
+                    <option value="lost">Lost Items</option>
+                    <option value="found">Found Items</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- Short Listing of Lost and Found Items -->
 <div class="container">
@@ -65,3 +121,72 @@
         </div>
     </div>
 </footer>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
+                filterItems();
+            });
+
+            // Real-time filtering as user types or changes selections
+            $('#searchInput, #categoryFilter, #typeFilter').on('input change', function() {
+                filterItems();
+            });
+
+            function filterItems() {
+                const searchText = $('#searchInput').val().toLowerCase();
+                const category = $('#categoryFilter').val();
+                const type = $('#typeFilter').val();
+
+                // Filter Lost Items
+                $('.items-grid .item-card').each(function() {
+                    const $card = $(this);
+                    const itemName = $card.find('h3').text().toLowerCase();
+                    const itemCategory = $card.find('p:contains("Category:")').text().toLowerCase();
+                    const itemDescription = $card.find('p:contains("Description:")').text().toLowerCase();
+                    const isLostItem = $card.closest('section').find('h2').text().includes('Lost');
+
+                    let showCard = true;
+
+                    // Text search
+                    if (searchText) {
+                        showCard = itemName.includes(searchText) ||
+                                 itemCategory.includes(searchText) ||
+                                 itemDescription.includes(searchText);
+                    }
+
+                    // Category filter
+                    if (showCard && category) {
+                        showCard = itemCategory.includes(category.toLowerCase());
+                    }
+
+                    // Type filter
+                    if (showCard && type) {
+                        if (type === 'lost') {
+                            showCard = isLostItem;
+                        } else if (type === 'found') {
+                            showCard = !isLostItem;
+                        }
+                    }
+
+                    $card.toggle(showCard);
+                });
+
+                // Show "no items" message if no results
+                $('.items-grid').each(function() {
+                    const $grid = $(this);
+                    const visibleItems = $grid.find('.item-card:visible').length;
+                    const $noItems = $grid.find('p:contains("No")');
+
+                    if (visibleItems === 0 && $noItems.length === 0) {
+                        $grid.append('<p class="no-results">No matching items found.</p>');
+                    } else if (visibleItems > 0) {
+                        $grid.find('.no-results').remove();
+                    }
+                });
+            }
+        });
+    </script>
+}
