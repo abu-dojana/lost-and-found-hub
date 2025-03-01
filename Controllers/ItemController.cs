@@ -1,7 +1,9 @@
-using LostandFound.Data;
+﻿using LostandFound.Data;
 using LostandFound.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace LostandFound.Controllers
@@ -9,10 +11,12 @@ namespace LostandFound.Controllers
     public class ItemController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ItemController(ApplicationDbContext context)
+        public ItemController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -21,10 +25,9 @@ namespace LostandFound.Controllers
             return View();
         }
 
-        // POST: /Item/PostLostItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostLostItem(LostItem model)
+        public async Task<IActionResult> PostLostItem([FromForm] LostItem model, IFormFile ImageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -33,6 +36,22 @@ namespace LostandFound.Controllers
 
             try
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "images");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageFile.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    model.ImageUrl = "/uploads/images/" + uniqueFileName;
+                }
+
                 await _context.LostItems.AddAsync(model);
                 await _context.SaveChangesAsync();
 
@@ -45,17 +64,16 @@ namespace LostandFound.Controllers
                 return View(model);
             }
         }
-        // GET: /Item/PostFoundItem
+
         [HttpGet]
         public IActionResult PostFoundItem()
         {
             return View();
         }
 
-        // POST: /Item/PostFoundItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostFoundItem(FoundItem model)
+        public async Task<IActionResult> PostFoundItem([FromForm] FoundItem model, IFormFile ImageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -64,6 +82,22 @@ namespace LostandFound.Controllers
 
             try
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "images");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageFile.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    model.ImageUrl = "/uploads/images/" + uniqueFileName;
+                }
+
                 await _context.FoundItems.AddAsync(model);
                 await _context.SaveChangesAsync();
 
@@ -77,45 +111,36 @@ namespace LostandFound.Controllers
             }
         }
 
-        // GET: /Item/SeeLostListings
         public async Task<IActionResult> SeeLostListings()
         {
             try
             {
-                // Fetch all lost items from the database (consider adding pagination)
-                var lostItems = await _context.LostItems.ToListAsync();
+                var lostItems = await _context.LostItems
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync();
                 return View(lostItems);
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) for debugging purposes
                 TempData["ErrorMessage"] = "An error occurred while fetching lost items.";
                 return View(new List<LostItem>());
             }
         }
 
-        // GET: /Item/SeeFoundListings
         public async Task<IActionResult> SeeFoundListings()
         {
             try
             {
-                // Fetch all found items from the database (consider adding pagination)
-                var foundItems = await _context.FoundItems.ToListAsync();
+                var foundItems = await _context.FoundItems
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync();
                 return View(foundItems);
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) for debugging purposes
                 TempData["ErrorMessage"] = "An error occurred while fetching found items.";
                 return View(new List<FoundItem>());
             }
         }
-
-        // Helper method to get the current user's ID (if authentication is implemented)
-        // private int GetCurrentUserId()
-        // {
-        //     var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        //     return userId;
-        // }
     }
 }

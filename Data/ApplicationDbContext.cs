@@ -1,5 +1,4 @@
-﻿// Data/ApplicationDbContext.cs
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using LostandFound.Models;
 
 namespace LostandFound.Data
