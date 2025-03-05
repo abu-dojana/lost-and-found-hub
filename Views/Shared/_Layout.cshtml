@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body style="background-image: url('@Url.Content("~/images/lf.jpg")'); background-size: cover;">
+
     <!-- Navbar -->
     <header>
         <nav class="navbar">
@@ -22,14 +23,14 @@
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("PostFoundItem", "Item")">Post a Found Item</a></li>
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeLostListings", "Item")">See Lost Items</a></li>
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeFoundListings", "Item")">See Found Items</a></li>
-                <!-- Views/Shared/_Layout.cshtml (update the notification icon in the navigation) -->
-                <li>
-                    <a style="color: #ffffff; text-decoration: none;" href="@Url.Action("Index", "Notification")">
-                        <i class="fas fa-bell"></i>
-                        @if (Context.Session.GetInt32("UserId") != null)
-                        {
-                            <span id="notification-badge" class="badge badge-pill badge-danger" style="display: none;"></span>
-                        }
+
+                <!-- Notification Icon -->
+                <li style="position: relative;">
+                    <a style="color: #ffffff; text-decoration: none; position: relative;" href="@Url.Action("Index", "Notification")">
+                        <i class="fas fa-bell" style="font-size: 24px;"></i>
+                        <span id="notification-badge" class="badge badge-pill badge-danger"
+                              style="position: absolute; top: -5px; right: -8px; font-size: 12px; display: none;">
+                        </span>
                     </a>
                 </li>
 
@@ -42,19 +43,6 @@
                     <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Register">Register</a></li>
                     <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Login">Login</a></li>
                 }
-                <!-- Views/Shared/_Layout.cshtml (update the notification icon in the navigation) -->
-                @* <li> *@
-                @*     <div class="notification-bell-container"> *@
-                @*         <a style="color: #ffffff; text-decoration: none;" href="@Url.Action("Index", "Notification")"> *@
-                @*             <i class="fas fa-bell"></i> *@
-                @*             @if (Context.Session.GetInt32("UserId") != null) *@
-                @*             { *@
-                @*                 <span id="notification-badge" class="badge badge-pill badge-danger" style="display: none;"></span> *@
-                @*             } *@
-                @*         </a> *@
-                @*     </div> *@
-                @* </li> *@
-
             </ul>
         </nav>
     </header>
@@ -68,11 +56,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <!-- Add to Views/Shared/_Layout.cshtml before </body> -->
+
+    <!-- JavaScript for updating notification badge -->
     @if (Context.Session.GetInt32("UserId") != null)
     {
         <script>
-            // Function to update notification count
             function updateNotificationCount() {
                 fetch('@Url.Action("GetUnreadCount", "Notification")')
                     .then(response => response.json())
@@ -84,19 +72,18 @@
                         } else {
                             badge.style.display = 'none';
                         }
-                    });
+                    })
+                    .catch(error => console.error("Error fetching notification count:", error));
             }
 
-            // Update on page load
             document.addEventListener('DOMContentLoaded', function() {
                 updateNotificationCount();
-
-                // Update every minute
-                setInterval(updateNotificationCount, 60000);
+                setInterval(updateNotificationCount, 60000); // Update every minute
             });
         </script>
     }
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
