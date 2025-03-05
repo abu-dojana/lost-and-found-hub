@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using LostandFound.Services;
 
 namespace LostandFound.Controllers
 {
@@ -12,11 +13,16 @@ namespace LostandFound.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IMatchingService _matchingService;
 
-        public ItemController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ItemController(
+               ApplicationDbContext context,
+               IWebHostEnvironment webHostEnvironment,
+               IMatchingService matchingService)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _matchingService = matchingService;
         }
 
         [HttpGet]
@@ -52,8 +58,23 @@ namespace LostandFound.Controllers
                     model.ImageUrl = "/uploads/images/" + uniqueFileName;
                 }
 
+                // Get the current user ID from session
+                var userId = HttpContext.Session.GetInt32("UserId");
+                if (userId.HasValue)
+                {
+                    model.UserId = userId.Value;
+                }
+                else
+                {
+                    // If not logged in, redirect to login page
+                    return RedirectToAction("Login", "Account");
+                }
+
                 await _context.LostItems.AddAsync(model);
                 await _context.SaveChangesAsync();
+
+                // Check for potential matches and create notifications
+                await _matchingService.CheckForMatchesAsync(model);
 
                 TempData["SuccessMessage"] = "Lost item posted successfully!";
                 return RedirectToAction("SeeLostListings");
@@ -98,8 +119,23 @@ namespace LostandFound.Controllers
                     model.ImageUrl = "/uploads/images/" + uniqueFileName;
                 }
 
+                // Get the current user ID from session
+                var userId = HttpContext.Session.GetInt32("UserId");
+                if (userId.HasValue)
+                {
+                    model.UserId = userId.Value;
+                }
+                else
+                {
+                    // If not logged in, redirect to login page
+                    return RedirectToAction("Login", "Account");
+                }
+
                 await _context.FoundItems.AddAsync(model);
                 await _context.SaveChangesAsync();
+
+                // Check for potential matches and create notifications
+                await _matchingService.CheckForMatchesAsync(model);
 
                 TempData["SuccessMessage"] = "Found item posted successfully!";
                 return RedirectToAction("SeeFoundListings");
@@ -142,5 +178,44 @@ namespace LostandFound.Controllers
                 return View(new List<FoundItem>());
             }
         }
+
+        // Controllers/ItemController.cs (add these methods)
+        public async Task<IActionResult> ViewLostItem(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var lostItem = await _context.LostItems
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (lostItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(lostItem);
+        }
+
+        public async Task<IActionResult> ViewFoundItem(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var foundItem = await _context.FoundItems
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (foundItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(foundItem);
+        }
+
+
     }
 }
