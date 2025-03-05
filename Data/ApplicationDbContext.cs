@@ -14,5 +14,6 @@ namespace LostandFound.Data
         public DbSet<User> Users { get; set; }
         public DbSet<LostItem> LostItems { get; set; }
         public DbSet<FoundItem> FoundItems { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }
