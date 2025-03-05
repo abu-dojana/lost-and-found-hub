@@ -47,16 +47,20 @@ Lost and Found Hub is a web-based platform built using **ASP.NET Core MVC** and 
 - **Authentication:** ASP.NET Identity  
 - **Notifications:** Email (SMTP), SignalR (for real-time updates)  
 
-## Installation
+## Dependencies
 
-### Prerequisites
-Ensure you have the following installed:
-- [.NET SDK](https://dotnet.microsoft.com/download)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-- [Visual Studio](https://visualstudio.microsoft.com/) (or any preferred IDE)
+### Install VS Code
+Download and install [Visual Studio 2022](https://learn.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022).
 
-### Setup Instructions
-1. **Clone the repository**  
-   ```sh
-   git clone https://github.com/your-username/lost-and-found-hub.git
-   cd lost-and-found-hub
+### Install Required Packages
+Ensure you have the following packages installed:
+- `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+- `Microsoft.EntityFrameworkCore.SqlServer`
+- `Microsoft.EntityFrameworkCore.Tools`
+
+### Start Apache and MySQL
+Download and open [SQL Server 2014 Management Studio](https://www.microsoft.com/en-ie/download/details.aspx?id=42299).
+
+### Set Up MySQL Database
+1. Add your `ConnectionString` in `appsettings.json`.
+2. Copy the server name of your device from Microsoft SQL Server.
