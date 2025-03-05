@@ -1,4 +1,4 @@
-﻿<!-- Views/Notification/ViewMatch.cshtml -->
+<!-- Views/Notification/ViewMatch.cshtml -->
 @model LostandFound.Models.MatchViewModel
 
 @{
@@ -185,9 +185,14 @@
                     <li>The item names contain similar text</li>
                 }
 
-                @if (Model.LostItem.Description.Contains(Model.FoundItem.Description) || Model.FoundItem.Description.Contains(Model.LostItem.Description))
+                @if (ContainsSimilarKeywords(Model.LostItem.Description, Model.FoundItem.Description))
                 {
-                    <li>The descriptions contain similar text.</li>
+                    <li>The descriptions contain similar keywords.</li>
+                }
+
+                @if (LevenshteinDistance(Model.LostItem.Description, Model.FoundItem.Description) <= 5)
+                {
+                    <li>The descriptions are very similar (Levenshtein Distance).</li>
                 }
             }
         </ul>
@@ -197,3 +202,32 @@
         <a asp-action="Index" class="btn btn-secondary">Back to Notifications</a>
     </div>
 </div>
+
+@functions {
+    public bool ContainsSimilarKeywords(string description1, string description2)
+    {
+        var keywords1 = description1.ToLower().Split(new[] { ' ', ',', '.', ';', ':' }, StringSplitOptions.RemoveEmptyEntries);
+        var keywords2 = description2.ToLower().Split(new[] { ' ', ',', '.', ';', ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+        return keywords1.Intersect(keywords2).Any(); // Checks if any keywords overlap
+    }
+
+    public int LevenshteinDistance(string str1, string str2)
+    {
+        int[,] distance = new int[str1.Length + 1, str2.Length + 1];
+
+        for (int i = 0; i <= str1.Length; distance[i, 0] = i++) { }
+        for (int j = 0; j <= str2.Length; distance[0, j] = j++) { }
+
+        for (int i = 1; i <= str1.Length; i++)
+        {
+            for (int j = 1; j <= str2.Length; j++)
+            {
+                int cost = (str2[j - 1] == str1[i - 1]) ? 0 : 1;
+                distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
+            }
+        }
+
+        return distance[str1.Length, str2.Length];
+    }
+}
