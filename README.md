@@ -57,10 +57,36 @@ Ensure you have the following packages installed:
 - `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
 - `Microsoft.EntityFrameworkCore.SqlServer`
 - `Microsoft.EntityFrameworkCore.Tools`
+- `BCrypt.Net-Next`
+- `Microsoft.AspNetCore.Authentication.Cookies`
 
 ### Start Apache and MySQL
-Download and open [SQL Server 2014 Management Studio](https://www.microsoft.com/en-ie/download/details.aspx?id=42299).
+Download and open [SQL Server Management Studio 20.2](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms).
 
 ### Set Up MySQL Database
 1. Add your `ConnectionString` in `appsettings.json`.
 2. Copy the server name of your device from Microsoft SQL Server.
+
+### Using Package Manager Console (PMC) in Visual Studio
+1. Open **Package Manager Console**:  
+   **Tools** → **NuGet Package Manager** → **Package Manager Console**
+2. Add a new migration:
+   ```powershell
+   Add-Migration InitialCreate
+   ```
+3. Apply the migration to the database:
+   ```powershell
+   Update-Database
+   ```
+4. Rollback last migration (if needed):
+   ```powershell
+   Remove-Migration
+   ```
+   (Only works if the migration has not been applied yet.)
+
+## Verification
+- Open **SQL Server Management Studio (SSMS)**.
+- Check the updated database schema.
+
+This ensures that the database is correctly updated with the latest changes.
+
