@@ -1,4 +1,5 @@
 using LostandFound.Data;
+using LostandFound.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,10 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Program.cs (add to existing services)
+builder.Services.AddScoped<IMatchingService, MatchingService>();
+
 
 var app = builder.Build();
 
