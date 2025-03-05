@@ -1,0 +1,199 @@
+﻿<!-- Views/Notification/ViewMatch.cshtml -->
+@model LostandFound.Models.MatchViewModel
+
+@{
+    ViewData["Title"] = "Potential Match";
+}
+
+<style>
+    .match-container {
+        max-width: 1200px;
+        margin: 30px auto;
+    }
+
+    .match-header {
+        background-color: #f8f9fa;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+
+    .items-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    @@media (min-width: 768px) {
+        .items-container{
+        flex-direction: row;
+    }
+
+    .item-card {
+        flex: 1;
+    }
+
+    }
+
+    .item-card {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .item-header {
+        padding: 10px 15px;
+        color: white;
+    }
+
+    .lost-header {
+        background-color: #dc3545;
+    }
+
+    .found-header {
+        background-color: #28a745;
+    }
+
+    .item-body {
+        padding: 20px;
+    }
+
+    .item-image {
+        width: 100%;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .item-info {
+        margin-top: 15px;
+    }
+
+    .contact-btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 15px;
+        text-align: center;
+        background-color: #3498db;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+        .contact-btn:hover {
+            background-color: #2980b9;
+            text-decoration: none;
+            color: white;
+        }
+
+    .match-details {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f1f8e9;
+        border-radius: 8px;
+    }
+
+    .match-footer {
+        margin-top: 30px;
+        text-align: center;
+    }
+</style>
+
+<div class="match-container">
+    <div class="match-header">
+        <h2>Potential Match Details</h2>
+        <p class="text-muted">Review the items below to see if they match.</p>
+    </div>
+
+    <div class="items-container">
+        @if (Model.LostItem != null)
+        {
+            <div class="item-card">
+                <div class="item-header lost-header">
+                    <h3>Lost Item</h3>
+                </div>
+                <div class="item-body">
+                    @if (!string.IsNullOrEmpty(Model.LostItem.ImageUrl))
+                    {
+                        <img src="@Model.LostItem.ImageUrl" alt="@Model.LostItem.ItemName" class="item-image" />
+                    }
+                    else
+                    {
+                        <img src="/images/no-image.png" alt="No image available" class="item-image" />
+                    }
+
+                    <div class="item-info">
+                        <h4>@Model.LostItem.ItemName</h4>
+                        <p><strong>Category:</strong>@Model.LostItem.Category</p>
+                        <p><strong>Description:</strong> @Model.LostItem.Description</p>
+                        <p><strong>Location:</strong> @Model.LostItem.Location</p>
+                        <p><strong>Contact:</strong> @Model.LostItem.ContactDetails</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.FoundItem != null)
+        {
+            <div class="item-card">
+                <div class="item-header found-header">
+                    <h3>Found Item</h3>
+                </div>
+                <div class="item-body">
+                    @if (!string.IsNullOrEmpty(Model.FoundItem.ImageUrl))
+                    {
+                        <img src="@Model.FoundItem.ImageUrl" alt="@Model.FoundItem.ItemName" class="item-image" />
+                    }
+                    else
+                    {
+                        <img src="/images/no-image.png" alt="No image available" class="item-image" />
+                    }
+
+                    <div class="item-info">
+                        <h4>@Model.FoundItem.ItemName</h4>
+                        <p><strong>Category:</strong> @Model.FoundItem.Category</p>
+                        <p><strong>Description:</strong> @Model.FoundItem.Description</p>
+                        <p><strong>Location:</strong> @Model.FoundItem.Location</p>
+                        <p><strong>Contact:</strong> @Model.FoundItem.ContactDetails</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="match-details">
+        <h4>Why these items matched:</h4>
+        <ul>
+            @if (Model.LostItem != null && Model.FoundItem != null)
+            {
+                <li>Both items are in the <strong>@Model.LostItem.Category</strong> category</li>
+
+                @if (Model.LostItem.Location == Model.FoundItem.Location)
+                {
+                    <li>Both items were reported in the same location: <strong>@Model.LostItem.Location</strong></li>
+                }
+                else
+                {
+                    <li>The locations might be related: <strong>@Model.LostItem.Location</strong> and <strong>@Model.FoundItem.Location</strong></li>
+                }
+
+                @if (Model.LostItem.ItemName.Contains(Model.FoundItem.ItemName) || Model.FoundItem.ItemName.Contains(Model.LostItem.ItemName))
+                {
+                    <li>The item names contain similar text</li>
+                }
+
+                @if (Model.LostItem.Description.Contains(Model.FoundItem.Description) || Model.FoundItem.Description.Contains(Model.LostItem.Description))
+                {
+                    <li>The descriptions contain similar text.</li>
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="match-footer">
+        <a asp-action="Index" class="btn btn-secondary">Back to Notifications</a>
+    </div>
+</div>

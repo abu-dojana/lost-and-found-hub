@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,6 +22,17 @@
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("PostFoundItem", "Item")">Post a Found Item</a></li>
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeLostListings", "Item")">See Lost Items</a></li>
                 <li><a style="color: #ffffff; text-decoration: none;" href="@Url.Action("SeeFoundListings", "Item")">See Found Items</a></li>
+                <!-- Views/Shared/_Layout.cshtml (update the notification icon in the navigation) -->
+                <li>
+                    <a style="color: #ffffff; text-decoration: none;" href="@Url.Action("Index", "Notification")">
+                        <i class="fas fa-bell"></i>
+                        @if (Context.Session.GetInt32("UserId") != null)
+                        {
+                            <span id="notification-badge" class="badge badge-pill badge-danger" style="display: none;"></span>
+                        }
+                    </a>
+                </li>
+
                 @if (Context.Session.GetInt32("UserId") != null)
                 {
                     <li><a href="@Url.Action("Logout", "Account")" class="login">LOG OUT</a></li>
@@ -31,11 +42,19 @@
                     <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Register">Register</a></li>
                     <li><a style="color: #ffffff; text-decoration: none;" href="/Account/Login">Login</a></li>
                 }
-                <li>
-                    <a style="color: #ffffff; text-decoration: none;" href="#">
-                        <i class="fas fa-bell"></i> <!-- Notification icon -->
-                    </a>
-                </li>
+                <!-- Views/Shared/_Layout.cshtml (update the notification icon in the navigation) -->
+                @* <li> *@
+                @*     <div class="notification-bell-container"> *@
+                @*         <a style="color: #ffffff; text-decoration: none;" href="@Url.Action("Index", "Notification")"> *@
+                @*             <i class="fas fa-bell"></i> *@
+                @*             @if (Context.Session.GetInt32("UserId") != null) *@
+                @*             { *@
+                @*                 <span id="notification-badge" class="badge badge-pill badge-danger" style="display: none;"></span> *@
+                @*             } *@
+                @*         </a> *@
+                @*     </div> *@
+                @* </li> *@
+
             </ul>
         </nav>
     </header>
@@ -49,6 +68,35 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Add to Views/Shared/_Layout.cshtml before </body> -->
+    @if (Context.Session.GetInt32("UserId") != null)
+    {
+        <script>
+            // Function to update notification count
+            function updateNotificationCount() {
+                fetch('@Url.Action("GetUnreadCount", "Notification")')
+                    .then(response => response.json())
+                    .then(data => {
+                        const badge = document.getElementById('notification-badge');
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline-block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    });
+            }
+
+            // Update on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                updateNotificationCount();
+
+                // Update every minute
+                setInterval(updateNotificationCount, 60000);
+            });
+        </script>
+    }
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

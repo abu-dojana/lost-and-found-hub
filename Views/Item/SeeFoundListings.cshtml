@@ -1,4 +1,4 @@
-@model IEnumerable<LostandFound.Models.FoundItem>
+﻿@model IEnumerable<LostandFound.Models.FoundItem>
 
 @{
     ViewData["Title"] = "Found Items";
@@ -108,15 +108,18 @@
         <div class="items-grid">
             @foreach (var item in Model)
             {
+                <!-- In Views/Item/SeeFoundListings.cshtml and SeeLostListings.cshtml, update the item-card div -->
                 <div class="item-card">
-                    @if (!string.IsNullOrEmpty(item.ImageUrl))
-                    {
-                        <img src="@item.ImageUrl" alt="@item.ItemName" class="item-image" />
-                    }
-                    else
-                    {
-                        <img src="/images/no-image.png" alt="No image available" class="item-image" />
-                    }
+                    <a href="@Url.Action("ViewFoundItem", "Item", new { id = item.Id })">
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="@item.ItemName" class="item-image" />
+                        }
+                        else
+                        {
+                            <img src="/images/no-image.png" alt="No image available" class="item-image" />
+                        }
+                    </a>
                     <div class="item-content">
                         <h3 class="item-title">@item.ItemName</h3>
                         <span class="item-category">@item.Category</span>
@@ -131,6 +134,7 @@
                         </div>
                     </div>
                 </div>
+
             }
         </div>
     }

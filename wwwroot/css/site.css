@@ -199,3 +199,22 @@ footer {
         margin-bottom: 10px;
     }
 }
+
+/* Add to wwwroot/css/site.css */
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Style for the notification bell container */
+.notification-bell-container {
+    position: relative;
+    display: inline-block;
+}

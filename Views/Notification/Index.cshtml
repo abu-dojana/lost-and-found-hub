@@ -1,0 +1,115 @@
+﻿<!-- Views/Notification/Index.cshtml -->
+@model IEnumerable<LostandFound.Models.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<style>
+    .notifications-container {
+        max-width: 800px;
+        margin: 30px auto;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .notifications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .notification-item {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border-left: 4px solid #3498db;
+        background-color: #f8f9fa;
+        transition: background-color 0.2s;
+    }
+
+        .notification-item.unread {
+            background-color: #e1f5fe;
+        }
+
+        .notification-item:hover {
+            background-color: #f1f1f1;
+        }
+
+    .notification-content {
+        margin-bottom: 10px;
+    }
+
+    .notification-actions {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9em;
+    }
+
+    .notification-time {
+        color: #666;
+    }
+
+    .notification-action {
+        color: #3498db;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .notification-action:hover {
+            text-decoration: underline;
+        }
+
+    .no-notifications {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+</style>
+
+<div class="notifications-container">
+    <div class="notifications-header">
+        <h2>Your Notifications</h2>
+        @if (Model.Any(n => !n.IsRead))
+        {
+            <a asp-action="MarkAllAsRead" class="notification-action">Mark all as read</a>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="no-notifications">
+            <p>You don't have any notifications yet.</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var notification in Model)
+        {
+            <div class="notification-item @(notification.IsRead ? "" : "unread")">
+                <div class="notification-content">
+                    @notification.Message
+                </div>
+                <div class="notification-actions">
+                    <span class="notification-time">@notification.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</span>
+                    <div>
+                        @* <a href="@Url.Action("ViewMatch", "Notification", new { id = notification.Id })" class="notification-action">View Match</a> *@
+                        <!-- Update in Views/Notification/Index.cshtml -->
+                        <a href="@Url.Action("ViewMatch", "Notification", new { id = notification.Id })" class="notification-action">View Match</a>
+
+                        @if (!notification.IsRead)
+                        {
+                            <span> | </span>
+                            <a href="@Url.Action("MarkAsRead", "Notification", new { id = notification.Id })" class="notification-action">Mark as read</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
