@@ -1,6 +1,7 @@
-﻿using LostandFound.Data;
+using LostandFound.Data;
 using LostandFound.Models;
 using Microsoft.AspNetCore.Mvc;
+using BCrypt.Net;
 
 namespace LostandFound.Controllers
 {
@@ -28,9 +29,9 @@ namespace LostandFound.Controllers
                 return View(model);
             }
 
-            // Authenticate user
-            var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-            if (user == null)
+            // Find user by email
+            var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 TempData["ErrorMessage"] = "Invalid email or password.";
                 return View(model);
@@ -64,13 +65,17 @@ namespace LostandFound.Controllers
                 return View(model);
             }
 
+            // Hash password using BCrypt
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
             // Save user to database
             var user = new User
             {
                 Username = model.Username,
                 Email = model.Email,
-                Password = model.Password // In production, hash the password!
+                Password = hashedPassword // Store hashed password
             };
+
             _context.Users.Add(user);
             _context.SaveChanges();
 
